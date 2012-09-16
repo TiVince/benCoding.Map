@@ -1,5 +1,28 @@
 //Create our window, the usual stuff
 var win  = Ti.UI.createWindow({backgroundColor:'#fff',title:'Menu', tabBarHidden:true});
+var map = require('bencoding.map');
+
+
+
+var bUsrTrkSample = Ti.UI.createButton({
+    title:'User Tracking Mode', top: 360, left:30, right:30, height:42
+});
+win.add(bUsrTrkSample);
+bUsrTrkSample.addEventListener('click',function() {
+    var win = Ti.UI.createWindow({
+                    url:'userTracking_sample.js',
+                    backgroundColor:'#fff',
+                    titlePrompt:'userTrackingMode Demo', 
+                    tabBarHidden:true
+            });
+                    
+    tab1.open(win);
+});
+
+
+
+
+
 var tabGroup = Ti.UI.createTabGroup();
 var tab1 = Titanium.UI.createTab({ window:win });
 
