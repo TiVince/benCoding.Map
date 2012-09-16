@@ -13,10 +13,9 @@
 #import "TiUIView.h"
 #import <MapKit/MapKit.h>
 #import "TiMapAnnotationProxy.h"
-#import "ExtPolygon.h"
-#import "ExtCircle.h"
 #import "WildcardGestureRecognizer.h"
-
+#import "BBSquareOverlayView.h"
+#import "BBSquareOverlay.h"
 @interface BencodingMapView : TiUIView<MKMapViewDelegate> {
 @private
 	MKMapView *map;
@@ -35,8 +34,6 @@
 	id<MKAnnotation> hitAnnotation;
 	BOOL hitSelect;
 	BOOL manualSelect;
-    NSMutableArray* polygonOverlays;
-    NSMutableArray* circleOverlays;
     WildcardGestureRecognizer * tapInterceptor;
 }
 
@@ -53,13 +50,14 @@
 
 #pragma mark Public APIs
 - (MKOverlayView *)prepareOverlayForPresentation:(id <MKOverlay>)overlay;
--(void) clear:(id)unused;
+-(void)clear:(id)unused;
 -(void)removeAllCircles:(id)arg;
 -(void)removeCircle:(id)args;
 -(void)addCircle:(id)args;
 -(void)addKML:(id)args;
 -(void)removeKML:(id)args;
 -(void)ZoomToFit:(id)unused;
+-(void)ZoomOutFull:(id)unused;
 
 -(void)removeAllPolygons:(id)arg;
 -(void)removePolygon:(id)args;

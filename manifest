@@ -2,7 +2,11 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
+<<<<<<< HEAD
 version: 0.5.3f
+=======
+version: 0.5.4
+>>>>>>> upstream/master
 apiversion: 2
 description: benCoding.Map
 author: benCoding.com
