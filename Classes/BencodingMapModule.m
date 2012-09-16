@@ -10,7 +10,15 @@
 #import "TiHost.h"
 #import "TiUtils.h"
 
+#import <MapKit/MapKit.h>
+
 @implementation BencodingMapModule
+
+//Vince Added
+MAKE_SYSTEM_PROP(USER_TRACKING_MODE_NONE,MKUserTrackingModeNone);
+MAKE_SYSTEM_PROP(USER_TRACKING_MODE_FOLLOW,MKUserTrackingModeFollow);
+MAKE_SYSTEM_PROP(USER_TRACKING_MODE_FOLLOW_WITH_HEADING,MKUserTrackingModeFollowWithHeading);
+//
 
 #pragma mark Internal
 

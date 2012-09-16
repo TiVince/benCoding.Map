@@ -43,6 +43,7 @@
 @property (nonatomic, readonly) CLLocationDegrees longitudeDelta;
 @property (nonatomic, readonly) CLLocationDegrees latitudeDelta;
 @property (nonatomic, readonly) NSArray *customAnnotations;
+@property (nonatomic, readonly) BOOL userLocationVisible;
 
 #pragma mark Private APIs
 -(TiMapAnnotationProxy*)annotationFromArg:(id)arg;

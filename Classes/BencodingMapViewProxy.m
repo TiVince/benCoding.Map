@@ -41,6 +41,24 @@
 	[super _destroy];
 }
 
+-(NSNumber*) isUserLocationVisible
+{
+    NSLog(@" VIEWPROXY IS USER LOCATION VISIBLE ");
+    
+    
+    if ([self viewAttached]) {
+    
+        
+        return NUMBOOL( [ (BencodingMapView *)[self view] userLocationVisible] );
+        
+        
+    }  
+    
+    //return NUMBOOL(NO);
+    return NUMINT(-1);
+}
+
+
 -(NSNumber*) longitudeDelta
 {
 	__block CLLocationDegrees delta = 0.0;

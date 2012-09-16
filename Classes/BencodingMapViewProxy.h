@@ -26,6 +26,7 @@
 
 @property (nonatomic, readonly) NSNumber* longitudeDelta;
 @property (nonatomic, readonly) NSNumber* latitudeDelta;
+@property (nonatomic, readonly, getter=isUserLocationVisible) NSNumber* userLocationVisible;
 
 -(TiMapAnnotationProxy*)annotationFromArg:(id)arg;
 

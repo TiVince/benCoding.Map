@@ -217,8 +217,8 @@ The User Tracking is the native MKUserTrackingMode implementation made available
 
 <b>Sample</b>
 <pre><code>
-
-var map = Ti.UI.Map.createView({
+var map = require('bencoding.map');
+var mapView = map.createView({
    //whatever extra options
    userTrackingMode:{
     mode: 2, //you can use 0, 1 or 2
@@ -227,7 +227,7 @@ var map = Ti.UI.Map.createView({
 });
 
 //or
-map.setUserTrackingMode({
+mapView.setUserTrackingMode({
     mode: 2,
     animated: true
 })    
@@ -242,10 +242,10 @@ I recommend to keep track of the UserTrackingMode since it can change suddenly (
 You can keep track with this eventListener:
 
 <pre><code>
-map.addEventListener("userTrackingMode",function(e){
+mapView.addEventListener("userTrackingMode",function(e){
     var trackingMode = e.mode;
     //whatever you want to do with the tracking mode
-}
+});
 </code></pre>
 
 <h2>How to work with KML</h2>

@@ -6,9 +6,23 @@
  */
 
 #import "TiModule.h"
-
 @interface BencodingMapModule : TiModule 
 {
+    
 }
+//Vince Added
+/*The mode used to track the user location on the map.
 
+enum {
+    MKUserTrackingModeNone = 0,
+    MKUserTrackingModeFollow,
+    MKUserTrackingModeFollowWithHeading,
+};
+typedef NSInteger MKUserTrackingMode;
+*/
+
+@property(nonatomic,readonly) NSNumber *USER_TRACKING_MODE_NONE;
+@property(nonatomic,readonly) NSNumber *USER_TRACKING_MODE_FOLLOW;
+@property(nonatomic,readonly) NSNumber *USER_TRACKING_MODE_FOLLOW_WITH_HEADING;
+//
 @end

@@ -22,8 +22,16 @@
 
 #pragma mark Internal
 
-bool respondsToMKUserTrackingMode = NO;
+static bool respondsToMKUserTrackingMode = NO;
 bool polygonClickListenerAdded = NO;
+
+
++(void) initialize
+{
+   // NSLog(@"VIEW initialize");
+    respondsToMKUserTrackingMode = [MKMapView instancesRespondToSelector:@selector(setUserTrackingMode:)];
+    
+}
 
 -(void)dealloc
 {
@@ -89,7 +97,7 @@ bool polygonClickListenerAdded = NO;
         loaded = YES;
         
         //Add in User Tracking
-        respondsToMKUserTrackingMode = [MKMapView instancesRespondToSelector:@selector(setUserTrackingMode:)];
+       // respondsToMKUserTrackingMode = [MKMapView instancesRespondToSelector:@selector(setUserTrackingMode:)];
     
         if (respondsToMKUserTrackingMode)
         {
@@ -98,6 +106,7 @@ bool polygonClickListenerAdded = NO;
     }
     return map;
 }
+
 
 - (NSArray *)customAnnotations
 {
@@ -164,7 +173,6 @@ bool polygonClickListenerAdded = NO;
 }
 
 #pragma mark Public APIs
-
 
 -(void)addAnnotation:(id)args
 {
@@ -342,6 +350,23 @@ bool polygonClickListenerAdded = NO;
 	return region_;
 }
 
+-(BOOL) userLocationVisible
+{
+    
+    CLLocation *location = [[[self map] userLocation]location] ;
+    
+    if (location == nil) {
+        NSLog(@"VIEW -> USER LOCATION = nil");
+    }
+    
+    BOOL test = [[self map] isUserLocationVisible];
+   
+    NSLog(@" VIEW-> USER LOCATION VISIBLE: %@", test?@"YES":@"NO" );
+    
+    return [[self map] isUserLocationVisible];
+}
+
+
 -(CLLocationDegrees) longitudeDelta
 {
     if (loaded) {
@@ -362,6 +387,22 @@ bool polygonClickListenerAdded = NO;
 
 
 #pragma mark Public APIs
+
+//vince moved
+-(void)setUserTrackingMode_:(id)value
+{
+    NSLog(@"VIEW  SET USER TRACKING MODE");
+    if(respondsToMKUserTrackingMode)
+    {
+        ENSURE_SINGLE_ARG(value,NSDictionary);
+        id userTrackingMode = [value objectForKey:@"mode"];
+        id animation = [value objectForKey:@"animated"];
+        
+        [[self map] setUserTrackingMode:[TiUtils intValue:userTrackingMode]  animated:[TiUtils boolValue:animation]];
+    }
+}
+
+
 
 -(void)setMapType_:(id)value
 {
@@ -508,6 +549,53 @@ bool polygonClickListenerAdded = NO;
 
 
 #pragma mark Delegates
+
+//Vince moved
+- (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated
+{
+    if(respondsToMKUserTrackingMode){
+        if ([self.proxy _hasListeners:@"userTrackingMode"])
+        {
+            //mode = [mapView userTrackingMode];
+            NSDictionary * props = [NSDictionary dictionaryWithObjectsAndKeys:
+                                    @"userTrackingMode",@"type",
+                                    [NSNumber numberWithInt:mode],@"mode",
+                                    nil];
+            [self.proxy fireEvent:@"userTrackingMode" withObject:props];
+        }
+    }
+}
+//
+
+//Vince Added
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    
+    
+    if ([self.proxy _hasListeners:@"userLocation"])
+    {
+         CLLocation*   myLocation = [userLocation location];
+        CLLocationCoordinate2D coord = [myLocation coordinate];
+        
+                
+        NSDictionary * props = [NSDictionary dictionaryWithObjectsAndKeys:
+                                
+                            [NSNumber numberWithFloat:coord.latitude],@"latitude",
+                            [NSNumber numberWithFloat:coord.longitude],@"longitude",
+                            [NSNumber numberWithFloat:[myLocation course ]],@"heading",
+                            [NSNumber numberWithLongLong:(long long)([[myLocation timestamp] timeIntervalSince1970] * 1000)],@"timestamp",
+                                nil
+                                ];
+        
+        [self.proxy fireEvent:@"userLocation" withObject:props];
+        
+    }
+    
+    
+    
+}
+
+//
 
 - (MKOverlayView *)mapView:(MKMapView *)mapView viewForOverlay:(id <MKOverlay>)overlay
 {	
@@ -1323,32 +1411,10 @@ bool polygonClickListenerAdded = NO;
     
 }
 
--(void)setUserTrackingMode_:(id)value
-{
-    if(respondsToMKUserTrackingMode)
-    {
-        ENSURE_SINGLE_ARG(value,NSDictionary);
-        id userTrackingMode = [value objectForKey:@"mode"];
-        id animation = [value objectForKey:@"animated"];
-        
-        [[self map] setUserTrackingMode:[TiUtils intValue:userTrackingMode]  animated:[TiUtils boolValue:animation]];
-    }
-}
 
-- (void)mapView:(MKMapView *)mapView didChangeUserTrackingMode:(MKUserTrackingMode)mode animated:(BOOL)animated
-{
-    if(respondsToMKUserTrackingMode){
-        if ([self.proxy _hasListeners:@"userTrackingMode"])
-        {
-            //mode = [mapView userTrackingMode];
-            NSDictionary * props = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    @"userTrackingMode",@"type",
-                                    [NSNumber numberWithInt:mode],@"mode",
-                                    nil];
-            [self.proxy fireEvent:@"userTrackingMode" withObject:props];
-        }
-    }
-}
+
+
+
 
 -(void)removeKML:(id)args
 {
